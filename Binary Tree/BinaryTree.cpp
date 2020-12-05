@@ -1,7 +1,10 @@
 #include <iostream>
+#include <vector>
+#include <string> 
+#include <cMath>
 using namespace std;
 
-//jean yves youssef
+//jean yves youssef 182422
 
 struct Noeud {
     int val;
@@ -34,6 +37,35 @@ Arbre findEmpty(Arbre tmp){
 	if(tmp->fg==0) return tmp;
 	else{
 		findEmpty(tmp->fg);
+	}
+}
+
+
+void Miror(Arbre& a){
+	if(a==0){
+		return;
+	}
+	else{
+		Arbre tmp=a->fd;
+		a->fd=a->fg;
+		a->fg=tmp;
+		Miror(a->fd);
+		Miror(a->fg);
+	}
+}
+
+int findMax(Arbre a){
+	if(a==0){
+		return 0;
+	}
+	else if(a->fd==0){
+		return max(a->val,findMax(a->fg));
+	}	
+	else if(a->fg==0){
+		return max(a->val,findMax(a->fd));
+	}
+	else{
+		return max(a->val,max(findMax(a->fg),findMax(a->fd)));
 	}
 }
 
@@ -114,9 +146,11 @@ void AfficheEnordre(Arbre a) {
         return;
     }
     else {
+    
         AfficheEnordre(a->fg);
-        cout << " " << a->val;
+        
         AfficheEnordre(a->fd);
+        	cout << " " << a->val;
     }
 }
 
@@ -131,9 +165,33 @@ bool find(int x, Arbre a) {
     }
 }
 
+void maxDiff(vector<int>& v){
+	int mini=v[0];
+	int maxi=v[0];
+	for (size_t i=0;i<v.size();++i){
+		if(mini>=v[i]){
+			mini=v[i];
+		}
+		if(maxi<=v[i]){
+			maxi=v[i];
+		}
+	}
+	cout<<"MaxDiff: "<<maxi-mini<<endl;
+}
 
-
-
+int Eval(string s){
+	if(s.size()==0){
+		return 0;
+	}
+	char A=s.back();;
+	s.pop_back();
+	if(A!='+'){
+		int a=A-'0';
+		return  a + Eval(s);
+	}else{
+		return Eval(s);
+	}
+}
 
 void findInRange(int a,Arbre x, int y){
 	for (int i=a;i<=y;++i){
@@ -177,24 +235,37 @@ int main()
 {
     Arbre a = 0; // Arbre vide
 	
-    for (int i = 0;i<10;++i) {
+	vector<int> v={3,1,4,1,5,9,2};
+	maxDiff(v);
+	cout<<"EVal: "<<Eval("9+2+6+8")<<endl;
+	
+    
+	
+	
+	
+	for (int i = 0;i<5;++i) {
         int x;
         cout << "x=";cin >> x;
         a = add(x, a);
     //    cout<<"t=";cin>>t;
     }
    
+   	
+   	cout<<findMax(a)<<endl;
     //nouvelle representation de l'arbre binaire --: fg __: fd
     printBT(a);
-    cout<<endl<<"whish number do you like to remove: two childs ";
-    int x;cin>>x;
-    remove(x,a);
-    //AfficheEnordre(a);
-    cout<<endl<<"whish number do you like to remove: no childs ";cin>>x;
-    remove(x,a);
-    cout<<endl<<"whish number do you like to remove: root ";cin>>x;
-     remove(x,a);
-     printBT(a);
+    Miror(a);
+    printBT(a);
+    cout<<findMax(a)<<endl;
+   // cout<<endl<<"whish number do you like to remove: two childs ";
+    //int x;cin>>x;
+    //remove(x,a);
+    AfficheEnordre(a);
+    //cout<<endl<<"whish number do you like to remove: no childs ";cin>>x;
+    //remove(x,a);
+    //cout<<endl<<"whish number do you like to remove: root ";cin>>x;
+     //remove(x,a);
+    // printBT(a);
      cout<<endl;
     
 	
